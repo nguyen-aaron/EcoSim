@@ -1,0 +1,38 @@
+.tab-bar {
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tab-bar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 8px; /* Space between nav items */
+  background-color: #f0f0f0; /* Light grey background for the outer pill */
+  border-radius: 999px; /* This creates the pill shape */
+}
+
+.tab-bar a {
+  display: block;
+  padding: 10px 24px;
+  border-radius: 999px; /* Make the link itself a pill */
+  color: #333; /* Darker text for readability */
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* This styles the link for the CURRENTLY ACTIVE page */
+.tab-bar a.active {
+  background-color: #3CB371; /* The green accent color */
+  color: white; /* White text on the green pill */
+  outline: none; /* Removes the default browser focus outline */
+}
+
+/* This keeps the hover effect for non-active links */
+.tab-bar a:not(.active):hover {
+  background-color: #e0e0e0; /* A slightly darker grey for hover */
+}

@@ -3,12 +3,30 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #ffffff; /* Main background is now white */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Align content to the top */
+  padding-top: 60px;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #282c34; /* Default text color is now dark */
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between title and icon */
+}
+
+.title-container h1 {
+  margin: 0;
+  font-size: 3rem;
+  color: #3CB371; /* Green accent for the title */
+}
+
+.leaf-icon {
+  font-size: 2.5rem;
+  color: #3CB371; /* Green accent for the icon */
 }
