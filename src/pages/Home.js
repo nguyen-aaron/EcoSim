@@ -10,7 +10,6 @@ function Home() {
           <p className="tagline">Explore cause-and-effect in ecosystems with interactive simulations.</p>
           <div className="hero-ctas row" style={{marginTop:12}}>
             <Link to="/simulate" className="btn primary">Try Simulation</Link>
-            <Link to="/proposal" className="btn secondary">Read Proposal</Link>
           </div>
         </div>
       </section>
