@@ -1,32 +1,18 @@
-.App {
-  text-align: center;
+.App{
+  min-height:100%;
 }
 
-.App-header {
-  background-color: #ffffff; /* Main background is now white */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Align content to the top */
-  padding-top: 60px;
-  font-size: calc(10px + 2vmin);
-  color: #282c34; /* Default text color is now dark */
+.App-header{
+  background:transparent;
+  padding:18px 0 8px 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center; /* center title and tab bar horizontally */
+  width:100%;
 }
 
-.title-container {
-  display: flex;
-  align-items: center;
-  gap: 15px; /* Space between title and icon */
-}
+.title-container{display:flex;align-items:center;gap:12px}
+.title-container h1{margin:0;font-size:1.4rem;color:var(--text);font-weight:700}
+.leaf-icon{font-size:1.4rem}
 
-.title-container h1 {
-  margin: 0;
-  font-size: 3rem;
-  color: #3CB371; /* Green accent for the title */
-}
-
-.leaf-icon {
-  font-size: 2.5rem;
-  color: #3CB371; /* Green accent for the icon */
-}
+.main-area{padding:26px 0}

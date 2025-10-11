@@ -18,11 +18,13 @@ function App() {
           </div>
           <TabBar />
         </header>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/simulate" element={<Simulate />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
+        <div className="container main-area">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/simulate" element={<Simulate />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
