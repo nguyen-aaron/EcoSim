@@ -36,7 +36,7 @@ function tick() {
   params.x = xn;
   params.y = yn;
   time += dt;
-  postMessage({ t: time, prey: xn, predator: yn });
+  postMessage({ t: time, prey: xn, pred: yn });
 }
 
 // Start the simulation with setInterval based on fps
