@@ -105,6 +105,8 @@ function Simulate() {
   const [running, setRunning] = useState(false);
   //the array of y-values for the chart
   const [data, setData] = useState([]);
+  const [model, setModel] = useState('lotka');
+  const [error, setError] = useState('');
   // pull data from the useLoktaVolterra.js hook, for both prey and predator
   // (could add options to configure the parameters later)
   const { prey = [], predator = [], start, pause, reset } = useLoktaVolterra?.() || {}; 
@@ -123,8 +125,13 @@ function Simulate() {
   useEffect(() => {
     setData(prey || []);
   }, [prey]);
-
   const handleRun = () => {
+    setError('');
+    if (model !== 'lotka') {
+      // show informative error for unimplemented simulations
+      setError('Simulation for the selected model is not yet implemented.');
+      return;
+    }
     setRunning(true);
     if (start) start();
   };
@@ -133,10 +140,24 @@ function Simulate() {
     setRunning(false);
     if (pause) pause();
   };
-  const handleReset = () => { 
-    setRunning(false); 
-    if (reset) reset(); 
-    setData([]); 
+
+  const handleReset = () => {
+    setRunning(false);
+    if (reset) reset();
+    setData([]);
+    setError('');
+  };
+
+  const handleModelChange = (e) => {
+    const v = e.target.value;
+    setModel(v);
+    setError('');
+    // clear data and stop any running simulation when switching models
+    setData([]);
+    setRunning(false);
+    // ensure the hook is paused/reset so it stops emitting values
+    if (pause) pause();
+    if (reset) reset();
   };
 
   return (
@@ -146,6 +167,14 @@ function Simulate() {
           <div>
             <h2>Simulation</h2>
             <div style={{color:'var(--muted)'}}>Run ecosystem models and visualize results.</div>
+            <div style={{marginTop:8}}>
+              <label style={{fontSize:12,color:'var(--muted)',marginRight:8}}>Model:</label>
+              <select value={model} onChange={handleModelChange} style={{padding:'6px 8px',borderRadius:8,border:'1px solid rgba(15,23,36,0.06)'}}>
+                <option value="lotka">Lotka–Volterra (Predator–Prey)</option>
+                <option value="foodchain">Food Chain Dynamics</option>
+                <option value="invasive">Invasive Species Model</option>
+              </select>
+            </div>
           </div>
           <div style={{display:'flex',gap:8}}>
             <button className="btn secondary" onClick={handleReset}>Reset</button>
@@ -159,9 +188,19 @@ function Simulate() {
 
         <div style={{marginTop:16}}>
           <div style={{height:320}}>
-            <MiniSVGChart prey={prey} predator={predator} height={320} />
+          {/* Only pass hook data when the selected model is Lotka; otherwise show a blank chart */}
+          <MiniSVGChart
+            prey={model === 'lotka' ? prey : []}
+            predator={model === 'lotka' ? predator : []}
+            height={320}
+          />
           </div>
         </div>
+        {error && (
+          <div style={{marginTop:12,color:'#b00020',fontWeight:600}} role="alert">
+            {error}
+          </div>
+        )}
 
       </div>
     </div>
