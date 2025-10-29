@@ -15,7 +15,7 @@ let time = 0;
 
 
 //Runge-Kutta 4th order method to compute next population
-//used to solve the Lokta-Volterra differential equations since they can't be calculated directly
+//used to solve the Lotka-Volterra differential equations since they can't be calculated directly
 const rk4 = (x, y, dt, alpha, beta, delta, gamma) => {
   const fx = (X,Y)=> alpha*X - beta*X*Y;
   const fy = (X,Y)=> delta*X*Y - gamma*Y;
@@ -37,6 +37,7 @@ function tick() {
   params.y = yn;
   time += dt;
   postMessage({ t: time, prey: xn, pred: yn });
+  console.log(`tick: t=${time.toFixed(2)} prey=${xn.toFixed(2)} pred=${yn.toFixed(2)}`);
 }
 
 // Start the simulation with setInterval based on fps
@@ -52,6 +53,7 @@ function stop() {
 }
 
 onmessage = ({ data }) => {
+  console.log('worker received message', data);
   const { type, params: newParams } = data || {};
   if (type === "start") {
     params = { ...params, ...(newParams||{}) };

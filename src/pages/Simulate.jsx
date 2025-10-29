@@ -1,6 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useLoktaVolterra } from '../hooks/useLoktaVolterra';
-
+import React, { useMemo, useState } from 'react';
+import { useEcosimWorker } from '../hooks/useEcosimWorker';
 
 //draws an SVG line chart of the data
 function MiniSVGChart({
@@ -101,82 +100,67 @@ function MiniSVGChart({
   );
 }
 
+//Mapping of model keys to worker script URLs
+const WORKER_URLS = {
+  lotka: new URL('../EcosystemEngine/LotkaVolterra.js', import.meta.url),
+  foodchain: undefined, //when implemented, add URL here
+  invasive: undefined,  //when implemented, add URL here
+};
+
+//Main simulation page
 function Simulate() {
-  const [running, setRunning] = useState(false);
-  //the array of y-values for the chart
-  const [data, setData] = useState([]);
   const [model, setModel] = useState('lotka');
-  const [error, setError] = useState('');
-  // pull data from the useLoktaVolterra.js hook, for both prey and predator
-  // (could add options to configure the parameters later)
-  const { prey = [], predator = [], start, pause, reset } = useLoktaVolterra?.() || {}; 
 
-  const runOnce = useCallback(() => {
-     // generate sample data (sine-ish) for demo
-     // in real use, data comes from the simulation
-    const pts = Array.from({length:40}, (_,i) => {
-      const t = i / 6;
-      return Math.round(50 + Math.sin(t) * 30 + Math.random() * 6);
-    });
-    setData(pts);
-  }, []);
+  //Map dropdown selection to a worker file
+  const workerURL = WORKER_URLS[model];
 
-  // update data when the hook recieves update from LoktaVolterra.js (based on the fps param))
-  useEffect(() => {
-    setData(prey || []);
-  }, [prey]);
-  const handleRun = () => {
-    setError('');
-    if (model !== 'lotka') {
-      // show informative error for unimplemented simulations
-      setError('Simulation for the selected model is not yet implemented.');
-      return;
+  //Default parameters for each model
+  const params = useMemo(() => {
+    if (model === 'lotka') {
+      return { alpha: 0.6, beta: 0.025, delta: 0.01, gamma: 0.5, x: 40, y: 9, dt: 0.05, fps: 20 };
     }
-    setRunning(true);
-    if (start) start();
-  };
+    //add other model params here (foodchain, invasive)
+    return { fps: 20 };
+  }, [model]);
 
-  const handlePause = () => {
-    setRunning(false);
-    if (pause) pause();
-  };
+  const { prey, predator, start, pause, reset, running } =
+    useEcosimWorker({ workerURL, params, windowSize: 800 });
 
-  const handleReset = () => {
-    setRunning(false);
-    if (reset) reset();
-    setData([]);
-    setError('');
-  };
+  const handleRun = () => start();
+  const handlePause = () => pause();
+  const handleReset = () => reset();
 
   const handleModelChange = (e) => {
-    const v = e.target.value;
-    setModel(v);
-    setError('');
-    // clear data and stop any running simulation when switching models
-    setData([]);
-    setRunning(false);
-    // ensure the hook is paused/reset so it stops emitting values
-    if (pause) pause();
-    if (reset) reset();
+    const next = e.target.value;
+    //Stop current engine and clear series via reset() the hook will
+    //recreate the worker when workerPath changes
+    pause();
+    reset();
+    setModel(next);
   };
 
   return (
     <div className="container">
-      <div className="card" style={{padding:16}}>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
+      <div className="card" style={{ padding: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
           <div>
             <h2>Simulation</h2>
-            <div style={{color:'var(--muted)'}}>Run ecosystem models and visualize results.</div>
-            <div style={{marginTop:8}}>
-              <label style={{fontSize:12,color:'var(--muted)',marginRight:8}}>Model:</label>
-              <select value={model} onChange={handleModelChange} style={{padding:'6px 8px',borderRadius:8,border:'1px solid rgba(15,23,36,0.06)'}}>
+            <div style={{ color: 'var(--muted)' }}>Run ecosystem models and visualize results.</div>
+            <div style={{ marginTop: 8 }}>
+              <label style={{ fontSize: 12, color: 'var(--muted)', marginRight: 8 }}>Model:</label>
+              <select
+                value={model}
+                onChange={handleModelChange}
+                style={{ padding: '6px 8px', borderRadius: 8, border: '1px solid rgba(15,23,36,0.06)' }}
+              >
                 <option value="lotka">Lotka–Volterra (Predator–Prey)</option>
                 <option value="foodchain">Food Chain Dynamics</option>
                 <option value="invasive">Invasive Species Model</option>
               </select>
             </div>
           </div>
-          <div style={{display:'flex',gap:8}}>
+
+          <div style={{ display: 'flex', gap: 8 }}>
             <button className="btn secondary" onClick={handleReset}>Reset</button>
             {running ? (
               <button className="btn" onClick={handlePause}>Pause</button>
@@ -186,22 +170,11 @@ function Simulate() {
           </div>
         </div>
 
-        <div style={{marginTop:16}}>
-          <div style={{height:320}}>
-          {/* Only pass hook data when the selected model is Lotka; otherwise show a blank chart */}
-          <MiniSVGChart
-            prey={model === 'lotka' ? prey : []}
-            predator={model === 'lotka' ? predator : []}
-            height={320}
-          />
+        <div style={{ marginTop: 16 }}>
+          <div style={{ height: 320 }}>
+            <MiniSVGChart prey={prey} predator={predator} height={320} />
           </div>
         </div>
-        {error && (
-          <div style={{marginTop:12,color:'#b00020',fontWeight:600}} role="alert">
-            {error}
-          </div>
-        )}
-
       </div>
     </div>
   );
