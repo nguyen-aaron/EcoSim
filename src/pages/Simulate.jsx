@@ -3,23 +3,24 @@ import { useEcosimWorker } from '../hooks/useEcosimWorker';
 import { MODEL_CONFIG } from '../models/registry';
 import MiniSVGChart from '../components/MiniSVGChart';
 import ParamsPanel from '../components/ParamsPanel.jsx'; //ParamsPanel.jsx since it was ambiguous and caused errors for some reason
+import AboutModel from '../components/AboutModel.jsx'; 
 
 export default function Simulate() {
   console.log('ParamsPanel keys:', Object.keys(ParamsPanel), 'default typeof:', typeof ParamsPanel?.default);
 
   const [model, setModel] = useState('lotka');
-  const cfg = MODEL_CONFIG[model];
+  const config = MODEL_CONFIG[model];
 
   //Params for the current model
-  const [params, setParams] = useState(cfg.defaults);
+  const [params, setParams] = useState(config.defaults);
   useEffect(() => setParams(MODEL_CONFIG[model].defaults), [model]);
 
   //Prepare worker parameters (if any mapping is needed)
-  const workerParams = useMemo(() => (cfg.toWorker ? cfg.toWorker(params) : params), [cfg, params]);
+  const workerParams = useMemo(() => (config.toWorker ? config.toWorker(params) : params), [config, params]);
 
   //Ecosim worker hook
   const { running, prey, predator, start, pause, reset, setParams: sendPatch } =
-    useEcosimWorker({ workerURL: cfg.workerUrl, params: workerParams, windowSize: 800 });
+    useEcosimWorker({ workerURL: config.workerUrl, params: workerParams, windowSize: 800 });
 
   const handleParamChange = (name, val) => {
     const num = Number(val);
@@ -27,9 +28,9 @@ export default function Simulate() {
     const next = { ...params, [name]: num };
     setParams(next);
 
-    const live = cfg.fields.find(f => f.key === name)?.live;
+    const live = config.fields.find(f => f.key === name)?.live;
     if (running && live) {
-      const patch = cfg.toWorker ? cfg.toWorker({ [name]: num }) : { [name]: num };
+      const patch = config.toWorker ? config.toWorker({ [name]: num }) : { [name]: num };
       sendPatch(patch);
     }
   };
@@ -37,11 +38,11 @@ export default function Simulate() {
   const handleResetDefaults = () => {
     const defaults = MODEL_CONFIG[model].defaults;
     setParams(defaults);
-    if (running) sendPatch(cfg.toWorker ? cfg.toWorker(defaults) : defaults);
+    if (running) sendPatch(config.toWorker ? config.toWorker(defaults) : defaults);
   };
 
   const handleApplyRestart = () => {
-    const payload = cfg.toWorker ? cfg.toWorker(params) : params;
+    const payload = config.toWorker ? config.toWorker(params) : params;
     sendPatch(payload);
     if (running) { pause(); reset(); start(); } else { reset(); }
   };
@@ -72,21 +73,30 @@ export default function Simulate() {
 
         {/* Parameters for current model (Lotka only for now) */}
        
-
         <div style={{marginTop:16}}>
           <div style={{height:320}}>
             <MiniSVGChart prey={prey} predator={predator} height={320} />
           </div>
         </div>
+
          <ParamsPanel
           title="Parameters"
-          fields={cfg.fields}
+          fields={config.fields}
           values={params}
           running={running}
           onChange={handleParamChange}
           onReset={handleResetDefaults}
           onApply={handleApplyRestart}
         />
+
+        <AboutModel
+          title={config.about?.title}
+          summary={config.about?.summary}
+          bullets={config.about?.bullets}
+          notes={config.about?.notes}
+          equation={config.about?.equation}
+        />
+
       </div>
     </div>
   );

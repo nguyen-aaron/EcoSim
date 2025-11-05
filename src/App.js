@@ -4,6 +4,7 @@ import TabBar from './components/TabBar';
 import Home from './pages/Home';
 import Simulate from './pages/Simulate';
 import Settings from './pages/Settings';
+import "katex/dist/katex.min.css";
 
 function App() {
   return (
