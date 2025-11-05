@@ -29,7 +29,8 @@ export default function AboutModel({ title, summary, bullets = [], notes, equati
         <ul style={{ 
             marginTop: 6, 
             paddingLeft: 18, 
-            lineHeight: 1.6 
+            lineHeight: 1.6,
+            fontSize: 15,
             }}>
           {bullets.map((b, i) => (
             <li key={i}>{b}</li>
