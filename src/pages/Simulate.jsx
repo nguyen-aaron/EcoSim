@@ -22,17 +22,32 @@ export default function Simulate() {
   const { running, prey, predator, start, pause, reset, setParams: sendPatch } =
     useEcosimWorker({ workerURL: config.workerUrl, params: workerParams, windowSize: 800 });
 
+  const cleanParams = (raw) => {
+    const result = { ...raw };
+      for (const f of config.fields) {
+        const k = f.key;
+        if (result[k] === '') {
+        // fall back to model defaults if the field was cleared
+          result[k] = config.defaults[k];
+        }
+      }
+      return result;
+    };
+  
+
   const handleParamChange = (name, val) => {
     const num = Number(val);
-    if (!Number.isFinite(num)) return;
-    const next = { ...params, [name]: num };
+    const next = { ...params, [name]: val === '' ? '' : Number(val) };
     setParams(next);
 
     const live = config.fields.find(f => f.key === name)?.live;
-    if (running && live) {
-      const patch = config.toWorker ? config.toWorker({ [name]: num }) : { [name]: num };
-      sendPatch(patch);
-    }
+    if (running && live && val !== '') {
+      const num = Number(val);
+      if (Number.isFinite(num)) {
+        const patch = config.toWorker ? config.toWorker({ [name]: num }) : { [name]: num };
+        sendPatch(patch);
+      }
+    } 
   };
 
   const handleResetDefaults = () => {
@@ -42,7 +57,8 @@ export default function Simulate() {
   };
 
   const handleApplyRestart = () => {
-    const payload = config.toWorker ? config.toWorker(params) : params;
+    const cleaned = cleanParams(params);
+    const payload = config.toWorker ? config.toWorker(cleaned) : cleaned;
     sendPatch(payload);
     if (running) { pause(); reset(); start(); } else { reset(); }
   };
