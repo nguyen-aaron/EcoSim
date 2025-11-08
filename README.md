@@ -26,6 +26,8 @@ Build for production: `npm run build`
 ### Requirements:
 - Node.js 16 or higher
 - npm 8 or higher
+- npm install react-katex katex
+- install packages in requirements.txt
 
 
 
