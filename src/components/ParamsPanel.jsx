@@ -13,7 +13,7 @@ function NumberField({ label, name, value, min, max, step = 0.01, onChange }) {
         value={value === '' ? '' : (value ?? '')}
         min={min} max={max} step={step}
         onChange={handleChange}
-        style={{ padding: '6px 8px', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 8 }}
+        style={{ padding: '6px 8px', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 8, width: '80px', maxWidth: '100%' }}
       />
     </label>
   );
