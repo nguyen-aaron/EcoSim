@@ -62,13 +62,17 @@ onmessage = ({ data }) => {
     time = 0;
     start();
   }
-  else if (type === "stop") {
+  else if (type === "pause") {
     stop();
+  }
+  else if (type === "resume") {
+    start();
   }
   else if (type === "reset") {
     time = 0;
     if (newParams?.x0 != null) params.x = newParams.x0;
     if (newParams?.y0 != null) params.y = newParams.y0;
+    stop();
   }
   else if (type === "setParams") {
     params = { ...params, ...(newParams||{}) };

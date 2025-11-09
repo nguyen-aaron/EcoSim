@@ -37,31 +37,39 @@ export function useEcosimWorker({
     }
 
     return () => {
-      w.postMessage({ type: "stop" });
+      w.postMessage({ type: "pause" });
       w.terminate();
       workerRef.current = null;
     };
   }, [workerURL, windowSize]);
 
   const start = useCallback(() => {
-    setPrey([]); setPredator([]);
+    setPrey([]);
+    setPredator([]);
     workerRef.current?.postMessage({ type: "start", params });
     setRunning(true);
   }, [params]);
 
   const pause = useCallback(() => {
-    workerRef.current?.postMessage({ type: "stop" });
+    workerRef.current?.postMessage({ type: "pause" });
     setRunning(false);
   }, []);
 
+  const resume = useCallback(() => {
+    workerRef.current?.postMessage({ type: "resume" });
+    setRunning(true);
+  }, []);
+
   const reset = useCallback(() => {
-    setPrey([]); setPredator([]);
+    setPrey([]);
+    setPredator([]);
     workerRef.current?.postMessage({ type: "reset", params });
+    setRunning(false);
   }, [params]);
 
   const setParams = useCallback((patch) => {
     workerRef.current?.postMessage({ type: "setParams", params: patch });
   }, []);
 
-  return { running, prey, predator, start, pause, reset, setParams };
+  return { running, prey, predator, start, pause, resume, reset, setParams };
 }
