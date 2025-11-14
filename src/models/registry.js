@@ -1,6 +1,6 @@
 export const MODEL_CONFIG = {
   lotka: {
-    label: 'Lotka–Volterra (Predator–Prey)',     
+    label: 'Lotka–Volterra (Classic Predator–Prey)',     
     workerUrl: new URL('../EcosystemEngine/LotkaVolterra.js', import.meta.url),
     defaults: { alpha: 0.6, beta: 0.025, delta: 0.01, gamma: 0.5, x: 40, y: 9, dt: 0.05, fps: 20 },
     fields: [
@@ -14,7 +14,7 @@ export const MODEL_CONFIG = {
       { key: 'fps',   label: 'FPS',                min: 1, max: 120, step: 1, live: true },
     ],
     about: {
-      title: 'About the Lotka–Volterra Model',
+      title: 'About the Classic Predator-Prey Lotka–Volterra Model',
       summary: 'The Lotka-Volterra model is a classic mathematical model of predator-prey interactions in ecological systems. It describes how two species, one being a predator and the other being its prey, interact and affect each other\'s population over time. The model is a pair of first-order nonlinear differential equations: ',
       equation: String.raw`
       \begin{aligned}
@@ -65,6 +65,66 @@ export const MODEL_CONFIG = {
       notes: 'Note: This model makes some assumptions, such as constant environmental conditions, no other species interactions, and each interaction of species 1 and 2 are considered to be harmful to one or the other.'
     },
     toWorker: (p) => p
-  //add more models here
+  },
+
+  randomlotka: {
+    label: "Lotka–Volterra (Random Fluctuations)",
+    workerUrl: new URL('../EcosystemEngine/RandomLotkaVolterra.js', import.meta.url),
+    defaults: {
+      alpha: 0.6, beta: 0.025, delta: 0.01, gamma: 0.5,
+      sigmaX: 0.2, sigmaY: 0.2,
+      x: 40, y: 9,
+      dt: 0.02, fps: 30,
+      seed: 12345,
+      reflect: false
+    },
+
+    fields: [
+      { key: 'alpha', label: 'α (prey growth)',        min: 0, step: 0.01, live: true },
+      { key: 'beta',  label: 'β (predation rate)',     min: 0, step: 0.001, live: true },
+      { key: 'delta', label: 'δ (predator reproduction rate)',    min: 0, step: 0.001, live: true },
+      { key: 'gamma', label: 'γ (predator death)',     min: 0, step: 0.01, live: true },
+      { key: 'sigmaX',label: 'σₓ (prey randomness)',        min: 0, step: 0.01, live: true },
+      { key: 'sigmaY',label: 'σᵧ (predator randomness)',    min: 0, step: 0.01, live: true },
+      { key: 'x',     label: 'x₀ (prey start)',        min: 0, step: 1, live: false },
+      { key: 'y',     label: 'y₀ (predator start)',    min: 0, step: 1, live: false },
+      { key: 'dt',    label: 'Δt (time step)',         min: 0.001, step: 0.001, live: false },
+      { key: 'fps',   label: 'FPS',                    min: 1, max:120, step: 1, live: true },
+      { key: 'seed',  label: 'seed (for randomness)',                   min: 0, step: 1, live: false },
+      { key: 'reflect', label: 'Disable extinction due to randomness (mirror negatives into positives)', type: 'checkbox', live: false }
+    ],
+    about: {
+      title: 'About the Random Lotka–Volterra Model',
+      summary: 'The Random Lotka-Volterra model is an extension of the classic Lotka-Volterra predator-prey model that integrates stochastic (random) fluctuations in the population dynamics. This randomness is to simulate unpredictable environmental variations such as disease, natural disasters, resource fluctuations, climate changes, and other random factors that can affect populations negatively or positively. The model is represented by the following stochastic differential equations:',
+      equation: String.raw`
+      \begin{aligned}
+        dx &= \left(\alpha x - \beta xy\right)dt + \sigma_x x dW_t^x \\
+        dy &= \left(\delta xy - \gamma y\right)dt + \sigma_y y dW_t^x
+      \end{aligned}
+    `,
+      bullets: [
+        'The terms σₓX dWₓ and σᵧY dWᵧ represent the stochastic components, where σₓ and σᵧ are the noise intensities for prey and predator populations, respectively, and dWₓ and dWᵧ are increments of Wiener processes (representing random fluctuations).',
+        'The expected behavior of this model includes oscillations in population sizes similar to the classic Lotka-Volterra model, but with added variability due to the stochastic terms.'
+      ],
+      notes: 'Note: This model assumes that the random fluctuations are normally distributed. Depending on the noise intensity, populations may face extinction if enabled or rapid growth spurts may occur.'
+
+    },
+    toWorker: (p) => p,
+  },
+
+  rosenzweigmacarthur: {
+    label: 'Rosenzweig–MacArthur (Realistic Predator-Prey)',
+  },
+
+  chemostat: {
+    label: 'Chemostat (Microbial Growth)',
+  },
+
+  seir: {
+    label: 'SEIR (Disease Spread)',
   }
+
+
+    //add more models here
+
 };
