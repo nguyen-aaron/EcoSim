@@ -4,7 +4,9 @@ export default function MiniSVGChart({
   width = 800,
   height = 240,
   preyColor = '#5aa9e6',
-  predatorColor = '#ef476f'
+  predatorColor = '#ef476f',
+  preyLabel = 'Prey',
+  predatorLabel = 'Predator',
 }) {
   
   //filter datapoints to valid numbers only. there was an issue with NaN values being added, not sure why
@@ -83,13 +85,13 @@ export default function MiniSVGChart({
       </g>
 
       <g style={{ color: 'var(--muted)', fontFamily: 'inherit' }} fill="currentColor" fontSize={12}>
-        <g transform={`translate(${width - pad - 140}, ${pad - 20})`}>
+        <g transform={`translate(${width - pad - 160}, ${pad - 20})`}>
           <line x1="0" y1="0" x2="16" y2="0" stroke={preyColor} strokeWidth="3" />
-          <text x="22" y="4">Prey</text>
+          <text x="22" y="4">{preyLabel}</text>
         </g>
         <g transform={`translate(${width - pad - 70}, ${pad - 20})`}>
           <line x1="0" y1="0" x2="16" y2="0" stroke={predatorColor} strokeWidth="3" />
-          <text x="22" y="4">Predator</text>
+          <text x="22" y="4">{predatorLabel}</text>
         </g>
       </g>
     </svg>

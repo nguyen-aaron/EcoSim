@@ -12,11 +12,13 @@ export default function Simulate() {
     "default typeof:",
     typeof ParamsPanel?.default
   );
-
   const [model, setModel] = useState("lotka");
   const [paused, setPaused] = useState(false);
   const config = MODEL_CONFIG[model];
-
+  
+  //Series info for chart labels and colors
+  const s0 = config.series?.[0];
+  const s1 = config.series?.[1];
   //Params for the current model
   const [params, setParams] = useState(config.defaults);
   useEffect(() => setParams(MODEL_CONFIG[model].defaults), [model]);
@@ -128,7 +130,7 @@ export default function Simulate() {
                 style={{
                   padding: "6px 8px",
                   borderRadius: 8,
-                  border: "1px solid rgba(15,23,36,0.06)",
+                  border: "10px solid rgba(15,23,36,0.06)",
                 }}
               >
                 {Object.entries(MODEL_CONFIG).map(([key, m]) => (
@@ -177,11 +179,17 @@ export default function Simulate() {
           </div>
         </div>
 
-        {/* Parameters for current model (Lotka only for now) */}
-
         <div style={{ marginTop: 16 }}>
           <div style={{ height: 320 }}>
-            <MiniSVGChart prey={prey} predator={predator} height={320} />
+            <MiniSVGChart 
+            prey={prey} 
+            predator={predator} 
+            height={320} 
+            preyColor={s0?.color ?? '#5aa9e6'}
+            predatorColor={s1?.color ?? '#ef476f'}
+            preyLabel={s0?.label ?? 'Prey'}
+            predatorLabel={s1?.label ?? 'Predator'}
+            />
           </div>
         </div>
 

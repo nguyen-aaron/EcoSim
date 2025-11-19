@@ -3,6 +3,10 @@ export const MODEL_CONFIG = {
     label: 'Lotka–Volterra (Classic Predator–Prey)',     
     workerUrl: new URL('../EcosystemEngine/LotkaVolterra.js', import.meta.url),
     defaults: { alpha: 0.6, beta: 0.025, delta: 0.01, gamma: 0.5, x: 40, y: 9, dt: 0.05, fps: 20 },
+    series: [
+      { slot: "prey", label: "Prey",         color: "#5aa9e6"},
+      { slot: "predator", label: "Predator", color: "#e65a5a" }
+    ],
     fields: [
       { key: 'alpha', label: 'α (prey growth)',    min: 0, step: 0.005, live: true },
       { key: 'beta',  label: 'β (predation rate)', min: 0, step: 0.005, live: true },
@@ -35,6 +39,10 @@ export const MODEL_CONFIG = {
     label: 'Lotka–Volterra (Competitive)',
     workerUrl: new URL('../EcosystemEngine/CompetitiveLotkaVolterra.js', import.meta.url),
     defaults: { r1: 0.5, r2: 0.4, K1: 100, K2: 80, alpha12: 0.6, alpha21: 0.7, x1: 40, x2: 20, dt: 0.05, fps: 20 },
+    series: [
+      { slot: "prey",     label: "Species 1", color: "#4CAF50"},
+      { slot: "predator", label: "Species 2", color: "#2196F3" }
+    ],
     fields: [
       { key: 'r1',      label: 'r₁ (growth of species 1)',          min: 0,     step: 0.01,  live: true },
       { key: 'r2',      label: 'r₂ (growth of species 2)',          min: 0,     step: 0.01,  live: true },
@@ -78,7 +86,10 @@ export const MODEL_CONFIG = {
       seed: 12345,
       reflect: false
     },
-
+    series: [
+      { slot: "prey",    label: "Prey",      color: "#5aa9e6"},
+      { slot: "predator", label: "Predator", color: "#e65a5a"}
+    ],
     fields: [
       { key: 'alpha', label: 'α (prey growth)',        min: 0, step: 0.01, live: true },
       { key: 'beta',  label: 'β (predation rate)',     min: 0, step: 0.001, live: true },
@@ -115,7 +126,16 @@ export const MODEL_CONFIG = {
   rosenzweigmacarthur: {
     label: 'Stochastic Rosenzweig–MacArthur (Realistic Predator-Prey)',
     workerUrl: new URL('../EcosystemEngine/RosenzweigMacArthur.js', import.meta.url),
-    defaults: { r: 0.94, K: 100, a: 0.25, b: 0.05, c: 0.1, d: 0.35, x0: 24, y0: 6, dt: 0.05, fps: 20, sigmaX: 0.01, sigmaY: 0.01, seed: 12345, reflect: false, demographic: false },
+    defaults: { 
+      r: 0.94, K: 100, a: 0.25, b: 0.05, c: 0.1, d: 0.35, 
+      x0: 24, y0: 6, dt: 0.05, fps: 20, 
+      sigmaX: 0.01, sigmaY: 0.01, seed: 12345, 
+      reflect: false, demographic: false 
+    },
+    series: [
+      { slot: "prey",     label: "Prey",      color: "#5aa9e6"},
+      { slot: "predator", label: "Predator",  color: "#e65a5a" }
+    ],
     fields: [
       { key: "r",   label: "r (prey growth)", live: true },
       { key: "K",   label: "K (prey carrying capacity)", live: true },
@@ -133,7 +153,6 @@ export const MODEL_CONFIG = {
       { key: "reflect", label: "Disable extinction due to randomness (mirror negatives into positives)", type: "checkbox", live: true },
       { key: "demographic", label: "Disable environmental randomness (enable individual pred/prey randomness)", type: "checkbox", live: true },
     ],
-    toWorker: (p) => p,
     about: {
       title: 'About the Stochastic Rosenzweig–MacArthur Model',
       summary: 'The Rosenzweig-MacArthur model is an extension of the classic Lotka-Volterra predator-prey model that incorporates more realistic ecological dynamics, particularly in terms of predator-prey interactions. Unlike the classic Lotka-Volterra model, the Rosenzweig-MacArthur model introduces a saturating functional response for predation, which accounts for the fact that predators have a limited capacity to consume prey as prey density increases. The model is represented by the following differential equations:',
@@ -158,18 +177,10 @@ export const MODEL_CONFIG = {
         'The expected behavior of this model includes stable oscillations in population sizes, with the potential for more complex dynamics such as limit cycles or chaotic behavior depending on the parameters.'
       ],
       notes: 'Note: This model assumes that the environment has a carrying capacity for the prey population and that predators have a limited ability to consume prey. These factors lead to more complex dynamics compared to the classic Lotka-Volterra model.'
-    }
+    },
+    toWorker: (p) => p,
+
   }, 
-
-  chemostat: {
-    label: 'Chemostat (Microbial Growth)',
-  },
-
-  seir: {
-    label: 'SEIR (Disease Spread)',
-  }
-
-
     //add more models here
 
 };
