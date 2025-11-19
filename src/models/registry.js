@@ -113,8 +113,53 @@ export const MODEL_CONFIG = {
   },
 
   rosenzweigmacarthur: {
-    label: 'Rosenzweig–MacArthur (Realistic Predator-Prey)',
-  },
+    label: 'Stochastic Rosenzweig–MacArthur (Realistic Predator-Prey)',
+    workerUrl: new URL('../EcosystemEngine/RosenzweigMacArthur.js', import.meta.url),
+    defaults: { r: 0.94, K: 100, a: 0.25, b: 0.05, c: 0.1, d: 0.35, x0: 24, y0: 6, dt: 0.05, fps: 20, sigmaX: 0.01, sigmaY: 0.01, seed: 12345, reflect: false, demographic: false },
+    fields: [
+      { key: "r",   label: "r (prey growth)", live: true },
+      { key: "K",   label: "K (prey carrying capacity)", live: true },
+      { key: "a",   label: "a (predator attack rate)", live: true },
+      { key: "b",   label: "b (prey refuge effect)", live: true },
+      { key: "c",   label: "c (conversion of prey biomass into predator growth)", live: true },
+      { key: "d",   label: "d (predator death in absence of prey)", live: true },
+      { key: "x0",  label: "x₀ (starting prey population)" },
+      { key: "y0",  label: "y₀ (starting predator population)" },
+      { key: "dt",  label: "dt (time step)", live: true },
+      { key: "fps", label: "fps" },
+      { key: "sigmaX", label: "σx (prey randomness)", live: true },
+      { key: "sigmaY", label: "σy (predator randomness)", live: true },
+      { key: "seed", label: "seed" },
+      { key: "reflect", label: "Disable extinction due to randomness (mirror negatives into positives)", type: "checkbox", live: true },
+      { key: "demographic", label: "Disable environmental randomness (enable individual pred/prey randomness)", type: "checkbox", live: true },
+    ],
+    toWorker: (p) => p,
+    about: {
+      title: 'About the Stochastic Rosenzweig–MacArthur Model',
+      summary: 'The Rosenzweig-MacArthur model is an extension of the classic Lotka-Volterra predator-prey model that incorporates more realistic ecological dynamics, particularly in terms of predator-prey interactions. Unlike the classic Lotka-Volterra model, the Rosenzweig-MacArthur model introduces a saturating functional response for predation, which accounts for the fact that predators have a limited capacity to consume prey as prey density increases. The model is represented by the following differential equations:',
+      equation: String.raw`
+        \begin{aligned}
+          dX_t &= \left[
+            r X_t \left(1 - \frac{X_t}{K}\right)
+            - \frac{a X_t Y_t}{1 + b X_t}
+          \right] dt
+          + \sigma_X X_t\, dW_t^{(x)} \\[8pt]
+          dY_t &= \left[
+            c\,\frac{a X_t Y_t}{1 + b X_t}
+              - d Y_t
+            \right] dt
+            + \sigma_Y Y_t\, dW_t^{(y)}
+          \end{aligned}
+        `,
+      bullets: [
+        'Check the individual randomness box to see extinction risks or realistic fluctuations at low populations. Keep it unchecked to see smoother population curves that affect both popululations equally.',
+        'The terms σₓX dWₓ and σᵧY dWᵧ represent the stochastic components, where σₓ and σᵧ are the noise intensities for prey and predator populations, respectively, and dWₓ and dWᵧ are increments of Wiener processes (representing random fluctuations).',
+        'This model includes an added random component to the original Rosenzweig-MacArthur model to simulate environmental and demographic randomness affecting both prey and predator populations',
+        'The expected behavior of this model includes stable oscillations in population sizes, with the potential for more complex dynamics such as limit cycles or chaotic behavior depending on the parameters.'
+      ],
+      notes: 'Note: This model assumes that the environment has a carrying capacity for the prey population and that predators have a limited ability to consume prey. These factors lead to more complex dynamics compared to the classic Lotka-Volterra model.'
+    }
+  }, 
 
   chemostat: {
     label: 'Chemostat (Microbial Growth)',
