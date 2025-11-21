@@ -8,6 +8,7 @@ function TabBar() {
       <ul>
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/simulate">Simulate</NavLink></li>
+        <li><NavLink to="/mesa">Mesa</NavLink></li>
         <li><NavLink to="/settings">Settings</NavLink></li>
       </ul>
     </nav>

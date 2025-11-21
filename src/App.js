@@ -3,6 +3,7 @@ import './App.css';
 import TabBar from './components/TabBar';
 import Home from './pages/Home';
 import Simulate from './pages/Simulate';
+import MesaSim from './pages/MesaSim';
 import Settings from './pages/Settings';
 import "katex/dist/katex.min.css";
 
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/simulate" element={<Simulate />} />
+            <Route path="/mesa" element={<MesaSim />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
