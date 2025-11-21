@@ -13,7 +13,7 @@ from mesa import Model
 from mesa.space import MultiGrid
 from mesa.datacollection import DataCollector
 
-from mesa_abm.agents import Prey, Predator, GrassPatch
+from mesa_abm.agents import Prey, Predator, GrassPatch, InvasivePredator
 from mesa_abm.schedule import RandomActivationByBreed
 
 
@@ -57,6 +57,12 @@ class PredatorPrey(Model):
         initial_prey_energy=10,
         initial_predator_energy=10,
         chasing_mode=False,
+        # Invasive predator parameters
+        initial_invasive=0,
+        invasive_reproduce=0.08,
+        invasive_gain_from_food=30,
+        invasive_gain_from_predator=40,
+        initial_invasive_energy=20,
     ):
         """
         Create a new Predator–Prey model with the given parameters.
@@ -87,6 +93,12 @@ class PredatorPrey(Model):
         self.initial_prey_energy = initial_prey_energy
         self.initial_predator_energy = initial_predator_energy
         self.chasing_mode = chasing_mode
+        # Invasive predator settings
+        self.initial_invasive = initial_invasive
+        self.invasive_reproduce = invasive_reproduce
+        self.invasive_gain_from_food = invasive_gain_from_food
+        self.invasive_gain_from_predator = invasive_gain_from_predator
+        self.initial_invasive_energy = initial_invasive_energy
 
         self.schedule = RandomActivationByBreed(self)
         self.grid = MultiGrid(self.height, self.width, torus=True)
@@ -94,6 +106,7 @@ class PredatorPrey(Model):
             {
                 "Predators": lambda m: m.schedule.get_breed_count(Predator),
                 "Prey": lambda m: m.schedule.get_breed_count(Prey),
+                "Invasive": lambda m: m.schedule.get_breed_count(InvasivePredator),
             }
         )
 
@@ -122,6 +135,21 @@ class PredatorPrey(Model):
                 self,
                 moore=True,
                 energy=self.initial_predator_energy,
+                chasing_mode=self.chasing_mode,
+            )
+            self.schedule.add(a)
+            self.grid.place_agent(a, (x, y))
+
+        # Create invasive predators
+        for _ in range(self.initial_invasive):
+            x = self.random.randrange(self.grid.width)
+            y = self.random.randrange(self.grid.height)
+            a = InvasivePredator(
+                self.next_id(),
+                (x, y),
+                self,
+                moore=True,
+                energy=self.initial_invasive_energy,
                 chasing_mode=self.chasing_mode,
             )
             self.schedule.add(a)
