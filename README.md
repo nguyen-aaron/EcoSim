@@ -21,7 +21,7 @@ This README explains how to run the frontend (React) and the Python simulation c
 npm install
 ```
 
-2. Start the development server (hot reload):
+2. Start the development server:
 
 ```bash
 npm start
@@ -33,13 +33,13 @@ npm start
 npm run build
 ```
 
-If the default port `3000` is occupied, set a different port (zsh):
+If the default port `3000` is occupied, set a different port
 
 ```bash
 PORT=3001 npm start
 ```
 
-**Quick start — Python simulation server (Mesa)**
+**Quick start - Python simulation server (Mesa)**
 
 1. Create and activate a virtual environment (recommended):
 
@@ -60,7 +60,7 @@ pip install -r requirements.txt
 python run.py
 ```
 
-This runs `mesa_abm.server.server.launch()` (Mesa default UI). Mesa typically serves on port `8521`.
+This runs `mesa_abm.server.server.launch()` (Mesa default UI). Mesa serves on port `8521`.
 
 Run the frontend and backend in separate terminals to view the UI (frontend) and the Mesa visualizations.
 
@@ -68,6 +68,7 @@ Run the frontend and backend in separate terminals to view the UI (frontend) and
 - Terminal 1 (backend):
 
 ```bash
+pip install -r requirements.txt
 source .venv/bin/activate
 python run.py
 ```
