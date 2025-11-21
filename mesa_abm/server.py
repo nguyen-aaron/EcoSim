@@ -3,7 +3,7 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid, ChartModule
 from mesa.visualization.UserParam import UserSettableParameter
 
-from mesa_abm.agents import Predator, Prey, GrassPatch
+from mesa_abm.agents import Predator, Prey, GrassPatch, InvasivePredator
 from mesa_abm.model import PredatorPrey
 
 
@@ -22,9 +22,22 @@ def predator_prey_portrayal(agent):
             "scale": 0.5,
             "Layer": 1,
             "text": agent.energy,
+            "text_color": "black",
         }
         # Alternative (no image):
         # portrayal = {"Shape": "circle", "Color": "white", "Filled": "true", "Layer": 1, "r": 0.5}
+
+    elif isinstance(agent, InvasivePredator):
+        # Draw invasive predator (purple circle)
+        portrayal = {
+            "Shape": "circle",
+            "Color": "#6A0DAD",
+            "Filled": "true",
+            "Layer": 2,
+            "r": 0.5,
+            "text": agent.energy,
+            "text_color": "white",
+        }
 
     elif isinstance(agent, Predator):
         # Draw predator
@@ -35,6 +48,7 @@ def predator_prey_portrayal(agent):
             "scale": 0.5,
             "Layer": 1,
             "text": agent.energy,
+            "text_color": "black",
         }
         # Alternative (no image):
         # portrayal = {"Shape": "circle", "Color": "red", "Filled": "true", "Layer": 2, "r": 0.5}
@@ -76,6 +90,13 @@ model_params = {
     "prey_gain_from_food": UserSettableParameter("slider", "Energy gained from eating grass", 10, 1, 20, 1),
     "initial_prey_energy": UserSettableParameter("slider", "Prey energy at creation", 10, 1, 100, 1),
 
+    # Invasive predator
+    "initial_invasive": UserSettableParameter("slider", "Initial number of invasive predators", 0, 0, 50, 1),
+    "invasive_reproduce": UserSettableParameter("slider", "Invasive reproduce rate", 0.08, 0, 1, 0.01),
+    "invasive_gain_from_food": UserSettableParameter("slider", "Invasive energy from eating prey", 30, 1, 200, 1),
+    "invasive_gain_from_predator": UserSettableParameter("slider", "Invasive energy from eating predator", 40, 1, 200, 1),
+    "initial_invasive_energy": UserSettableParameter("slider", "Invasive energy at creation", 20, 1, 200, 1),
+
     # Grass + behavior
     "grass_countdown": UserSettableParameter("slider", "Grass growing time after being eaten", 16, 1, 100, 1),
     "chasing_mode": UserSettableParameter("checkbox", "Chasing mode", False),
@@ -83,7 +104,11 @@ model_params = {
 
 canvas_element = CanvasGrid(predator_prey_portrayal, 20, 20, 500, 500)
 chart_element = ChartModule(
-    [{"Label": "Predators", "Color": "#AA0000"}, {"Label": "Prey", "Color": "#666666"}]
+    [
+        {"Label": "Predators", "Color": "#AA0000"},
+        {"Label": "Prey", "Color": "#666666"},
+        {"Label": "Invasive", "Color": "#6A0DAD"},
+    ]
 )
 
 server = ModularServer(

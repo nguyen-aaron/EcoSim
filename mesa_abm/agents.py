@@ -160,6 +160,50 @@ class Predator(RandomWalker):
         self.try_die_from_energy()
 
 
+class InvasivePredator(Predator):
+    """
+    An invasive predator that disrupts the ecosystem. It can eat both Prey
+    and native Predator (but not other invasive predators). It has its own
+    reproduction rate and energy gains configured on the model.
+    """
+
+    def __init__(self, unique_id, pos, model, moore, energy=None, chasing_mode=False):
+        super().__init__(unique_id, pos, model, moore=moore, energy=energy, chasing_mode=chasing_mode)
+
+    def try_reproduce(self):
+        if self.random.random() <= getattr(self.model, "invasive_reproduce", self.model.predator_reproduce):
+            self.energy //= 2
+            a = InvasivePredator(self.model.next_id(), self.pos, self.model, self.moore, energy=self.energy)
+            self.model.schedule.add(a)
+            self.model.grid.place_agent(a, self.pos)
+
+    def try_eat(self):
+        """
+        Eats Prey like a normal predator, but will also eat native Predator
+        agents (not other invasive predators). Energy gains are configurable
+        via the model (`invasive_gain_from_food` and `invasive_gain_from_predator`).
+        """
+        cell_agents = self.model.grid.get_cell_list_contents([self.pos])
+        for agent in cell_agents:
+            if agent is self:
+                continue
+            # Eat Prey first if present
+            if isinstance(agent, Prey):
+                gain = int(getattr(self.model, "invasive_gain_from_food", self.model.predator_gain_from_food) * (
+                    min(1, agent.energy / getattr(self.model, "initial_prey_energy", 1))))
+                self.energy += gain
+                self.model.schedule.remove(agent)
+                self.model.grid.remove_agent(agent)
+                break
+            # Or eat native Predator (not invasive)
+            if isinstance(agent, Predator) and not isinstance(agent, InvasivePredator):
+                gain_pred = int(getattr(self.model, "invasive_gain_from_predator", getattr(self.model, "predator_gain_from_food", 0)))
+                self.energy += gain_pred
+                self.model.schedule.remove(agent)
+                self.model.grid.remove_agent(agent)
+                break
+
+
 
 class GrassPatch(Agent):
     """
