@@ -10,12 +10,12 @@ export default function Simulate() {
     "ParamsPanel keys:",
     Object.keys(ParamsPanel),
     "default typeof:",
-    typeof ParamsPanel?.default
+    typeof ParamsPanel?.default,
   );
   const [model, setModel] = useState("lotka");
   const [paused, setPaused] = useState(false);
   const config = MODEL_CONFIG[model];
-  
+
   //Series info for chart labels and colors
   const s0 = config.series?.[0];
   const s1 = config.series?.[1];
@@ -26,7 +26,7 @@ export default function Simulate() {
   //Prepare worker parameters (if any mapping is needed)
   const workerParams = useMemo(
     () => (config.toWorker ? config.toWorker(params) : params),
-    [config, params]
+    [config, params],
   );
 
   //Ecosim worker hook
@@ -181,14 +181,14 @@ export default function Simulate() {
 
         <div style={{ marginTop: 16 }}>
           <div style={{ height: 320 }}>
-            <MiniSVGChart 
-            prey={prey} 
-            predator={predator} 
-            height={320} 
-            preyColor={s0?.color ?? '#5aa9e6'}
-            predatorColor={s1?.color ?? '#ef476f'}
-            preyLabel={s0?.label ?? 'Prey'}
-            predatorLabel={s1?.label ?? 'Predator'}
+            <MiniSVGChart
+              prey={prey}
+              predator={predator}
+              height={320}
+              preyColor={s0?.color ?? "#5aa9e6"}
+              predatorColor={s1?.color ?? "#ef476f"}
+              preyLabel={s0?.label ?? "Prey"}
+              predatorLabel={s1?.label ?? "Predator"}
             />
           </div>
         </div>

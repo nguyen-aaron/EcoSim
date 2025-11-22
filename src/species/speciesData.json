@@ -1,0 +1,26 @@
+[
+  {
+    "commonName": "Burmese Python",
+    "scientificName": "Python bivittatus",
+    "speciesStatus": ["Nonnative", "Invasive"],
+    "primaryRegion": "Southern Florida (Everglades ecosystem)",
+    "description": "The Burmese python is a large constrictor native to South and Southeast Asia that has become one of the most damaging invasive species in the United States. Florida's warm, humid climate closely mirrors the python's native range, allowing it to thrive without the natural predators or diseases that normally keep its numbers in check. Adults routinely exceed 4 meters (13 ft) in length and can live for decades, making removal extremely difficult once populations establish.",
+    "diet": "Burmese pythons are generalist predators that feed on mammals, birds, and reptiles, including protected and endangered species. They can consume prey nearly equal to their own body mass, which elevates them to apex-predator status in invaded habitats. Their broad diet and high reproductive output enable rapid population growth that can become uncontrollable.",
+    "nativeRange": "India, lower China, the Malay Peninsula and some islands of the East Indies.",
+    "environmentalImpact": "Since their introduction, Burmese pythons have caused dramatic declines in small and medium-sized mammal populations across the Everglades. This loss of prey cascades through the food web, reducing food sources for native predators such as bobcats and alligators. The pythons' absence of natural enemies and ability to exploit diverse habitats disrupt the ecological balance, forcing Florida's ecosystems to adjust around a new, dominant predator.",
+    "citation": "https://myfwc.com/wildlifehabitats/profiles/reptiles/snakes/burmese-python/",
+    "imageUrl": "https://myfwc.com/media/29800/pythoncoiled.jpg"
+  },
+  {
+    "commonName": "Lionfish",
+    "scientificName": "Pterois volitans",
+    "speciesStatus": ["Nonnative", "Invasive"],
+    "primaryRegion": "Western Atlantic Ocean, Gulf of Mexico, and Caribbean Sea",
+    "description": "Lionfish are venomous reef fish native to the Indo-Pacific region that were likely introduced into Atlantic waters through the aquarium trade. In the wild they have become one of the most successful marine invasive species in recent history. With no significant natural predators, lionfish populations have exploded, spreading rapidly across coral reefs from Florida to South America.",
+    "diet": "Lionfish are ambush predators that feed primarily on small fish, shrimp, and other crustaceans. Because of their large appetite, lionfish can consume prey at a fast rate. Combined with rapid population growth and year-round reproduction (females can release tens of thousands of eggs every few days), lionfish populations can increase quickly and exert high predation pressure that removes essential herbivorous fish, leading to degraded coral reef health.",
+    "nativeRange": "Indo-Pacific region: Red Sea, Indian Ocean, Western Pacific",
+    "environmentalImpact": "By depleting native reef fish populations, lionfish disrupt coral reef ecosystems and outcompete native predators such as groupers and snappers for food. Their venomous spines deter most would-be predators, giving them an advantage in ecosystems that lack natural checks. Ecologists have documented steep declines in reef biodiversity in heavily invaded areas, forcing management programs to rely on diver removal and organized 'lionfish derbies' as primary control methods. Without continuous mitigation, lionfish threaten the long-term resilience of coral reef systems throughout the Atlantic and Caribbean.",
+    "citation": "https://www.fisheries.noaa.gov/southeast/ecosystems/impacts-invasive-lionfish",
+    "imageUrl": "https://www.fisheries.noaa.gov/s3/dam-migration/lionfish.jpg"
+  }
+]
