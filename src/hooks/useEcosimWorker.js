@@ -11,9 +11,12 @@ export function useEcosimWorker({
   windowSize = 800,
 } = {}) {
   const workerRef = useRef(null);
+
   const [running, setRunning] = useState(false);
   const [prey, setPrey] = useState([]);
   const [predator, setPredator] = useState([]);
+
+  const historyRef = useRef({ prey: [], predator: [] });
 
   //Recreate the worker whenever workerURL changes
   useEffect(() => {
@@ -23,9 +26,14 @@ export function useEcosimWorker({
     workerRef.current = w;
 
     w.onmessage = (e) => {
-      const { prey, pred } = e.data || {};
-      if (Number.isFinite(prey)) setPrey(prev => pushWindow(prev, prey, windowSize));
-      if (Number.isFinite(pred)) setPredator(prev => pushWindow(prev, pred, windowSize));
+      const { prey: x, pred: y } = e.data || {};
+      if (Number.isFinite(x)) historyRef.current.prey.push(x);
+      if (Number.isFinite(y)) historyRef.current.predator.push(y);
+
+      // update windowed series for the live chart (trimmed)
+      if (Number.isFinite(x)) setPrey((prev) => pushWindow(prev, x, windowSize));
+      if (Number.isFinite(y)) setPredator((prev) => pushWindow(prev, y, windowSize));
+
       console.log('[hook] received', e.data);
     };
 
@@ -46,6 +54,7 @@ export function useEcosimWorker({
   const start = useCallback(() => {
     setPrey([]);
     setPredator([]);
+    historyRef.current = { prey: [], predator: [] };
     workerRef.current?.postMessage({ type: "start", params });
     setRunning(true);
   }, [params]);
@@ -63,6 +72,7 @@ export function useEcosimWorker({
   const reset = useCallback(() => {
     setPrey([]);
     setPredator([]);
+    historyRef.current = { prey: [], predator: [] };
     workerRef.current?.postMessage({ type: "reset", params });
     setRunning(false);
   }, [params]);
@@ -71,5 +81,5 @@ export function useEcosimWorker({
     workerRef.current?.postMessage({ type: "setParams", params: patch });
   }, []);
 
-  return { running, prey, predator, start, pause, resume, reset, setParams };
+  return { running, prey, predator, start, pause, resume, reset, setParams, historyRef };
 }
