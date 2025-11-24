@@ -6,7 +6,7 @@ function TabBar() {
     <nav className="tab-bar">
       <ul>
         <li>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/home">Home</NavLink>
         </li>
         <li>
           <NavLink to="/simulate">Simulate</NavLink>

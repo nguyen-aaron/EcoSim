@@ -23,7 +23,7 @@ function App() {
         </header>
         <div className="container main-area">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/simulate" element={<Simulate />} />
             <Route path="/mesa" element={<MesaSim />} />
             <Route path="/species" element={<Species />} />
