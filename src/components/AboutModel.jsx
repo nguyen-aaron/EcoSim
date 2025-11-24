@@ -1,4 +1,4 @@
-import { BlockMath, InlineMath } from "react-katex";
+import { BlockMath } from "react-katex";
 
 export default function AboutModel({ title, summary, bullets = [], notes, equation }) {
   return (

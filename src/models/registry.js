@@ -1,7 +1,9 @@
+const PUBLIC = process.env.PUBLIC_URL || "";
+
 export const MODEL_CONFIG = {
   lotka: {
     label: 'Lotka–Volterra (Classic Predator–Prey)',     
-    workerUrl: new URL('../EcosystemEngine/LotkaVolterra.js', import.meta.url),
+    workerUrl: `${PUBLIC}/workers/LotkaVolterra.js`,
     defaults: { alpha: 0.6, beta: 0.025, delta: 0.01, gamma: 0.5, x: 40, y: 9, dt: 0.05, fps: 20 },
     series: [
       { slot: "prey", label: "Prey",         color: "#5aa9e6"},
@@ -37,7 +39,7 @@ export const MODEL_CONFIG = {
 
   competitivelotka: {
     label: 'Lotka–Volterra (Competitive)',
-    workerUrl: new URL('../EcosystemEngine/CompetitiveLotkaVolterra.js', import.meta.url),
+    workerUrl: `${PUBLIC}/workers/CompetitiveLotkaVolterra.js`,
     defaults: { r1: 0.5, r2: 0.4, K1: 100, K2: 80, alpha12: 0.6, alpha21: 0.7, x1: 40, x2: 20, dt: 0.05, fps: 20 },
     series: [
       { slot: "prey",     label: "Species 1", color: "#4CAF50"},
@@ -77,7 +79,7 @@ export const MODEL_CONFIG = {
 
   randomlotka: {
     label: "Lotka–Volterra (Random Fluctuations)",
-    workerUrl: new URL('../EcosystemEngine/RandomLotkaVolterra.js', import.meta.url),
+    workerUrl: `${PUBLIC}/workers/RandomLotkaVolterra.js`,
     defaults: {
       alpha: 0.6, beta: 0.025, delta: 0.01, gamma: 0.5,
       sigmaX: 0.2, sigmaY: 0.2,
@@ -125,7 +127,7 @@ export const MODEL_CONFIG = {
 
   rosenzweigmacarthur: {
     label: 'Stochastic Rosenzweig–MacArthur (Realistic Predator-Prey)',
-    workerUrl: new URL('../EcosystemEngine/RosenzweigMacArthur.js', import.meta.url),
+    workerUrl: `${PUBLIC}/workers/RosenzweigMacArthur.js`,
     defaults: { 
       r: 0.94, K: 100, a: 0.25, b: 0.05, c: 0.1, d: 0.35, 
       x0: 24, y0: 6, dt: 0.05, fps: 20, 

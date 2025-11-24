@@ -1,60 +1,75 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-function pushWindow(prev, v, max) {
-  return prev.length >= max ? [...prev.slice(1), v] : [...prev, v];
-}
+const PUBLIC = process.env.PUBLIC_URL || "";
+const WORKER_URLS = {
+  lotka:               `${PUBLIC}/workers/LotkaVolterra.js`,
+  competitivelotka:    `${PUBLIC}/workers/CompetitiveLotkaVolterra.js`,
+  randomlotka:         `${PUBLIC}/workers/RandomLotkaVolterra.js`,
+  rosenzweigmacarthur: `${PUBLIC}/workers/RosenzweigMacArthur.js`,
+};
 
-// generic hook that talks to any ecosim simulation logic (Lotka-Volterra, etc)
-export function useEcosimWorker({
-  workerURL,                   // REQUIRED: module path for the worker
-  params = {},                  // model parameters passed on "start"
-  windowSize = 800,
-} = {}) {
+export function useEcosimWorker({ modelKey, params = {}, windowSize = 800 } = {}) {
   const workerRef = useRef(null);
-
   const [running, setRunning] = useState(false);
   const [prey, setPrey] = useState([]);
   const [predator, setPredator] = useState([]);
 
-  const historyRef = useRef({ prey: [], predator: [] });
-
-  //Recreate the worker whenever workerURL changes
   useEffect(() => {
-    if (!workerURL) return;
-    console.log('[hook] creating worker', workerURL.toString());
-    const w = new Worker(workerURL, { type: "module" });
+    const url = WORKER_URLS[modelKey];
+
+    if (!url) {
+      console.error("[hook] no worker URL for modelKey:", modelKey);
+      return;
+    }
+
+    console.log("[hook] creating worker", modelKey, url);
+
+    let w;
+    try {
+      w = new Worker(url);
+    } catch (e) {
+      console.error("[hook] Worker() constructor failed", e);
+      return;
+    }
+
+    w.addEventListener("error", (e) => {
+      console.error(
+        "[hook] worker error",
+        {
+          message: e.message,
+          filename: e.filename,
+          lineno: e.lineno,
+          colno: e.colno,
+        },
+        e
+      );
+    });
+    w.addEventListener("messageerror", (e) => {
+      console.error("[hook] worker messageerror", e);
+    });
+
     workerRef.current = w;
 
     w.onmessage = (e) => {
       const { prey: x, pred: y } = e.data || {};
-      if (Number.isFinite(x)) historyRef.current.prey.push(x);
-      if (Number.isFinite(y)) historyRef.current.predator.push(y);
-
-      // update windowed series for the live chart (trimmed)
-      if (Number.isFinite(x)) setPrey((prev) => pushWindow(prev, x, windowSize));
-      if (Number.isFinite(y)) setPredator((prev) => pushWindow(prev, y, windowSize));
-
-      console.log('[hook] received', e.data);
+      if (Number.isFinite(x))
+        setPrey((p) => (p.length >= windowSize ? [...p.slice(1), x] : [...p, x]));
+      if (Number.isFinite(y))
+        setPredator((p) => (p.length >= windowSize ? [...p.slice(1), y] : [...p, y]));
     };
-
-    w.onerror = (e) => {
-      console.error('[hook] worker error', e.message, e);
-    };
-    w.onmessageerror = (e) => {
-      console.error('[hook] worker message error', e.message, e);
-    }
+    w.onerror = (e) => console.error("[hook] worker error", e);
+    w.onmessageerror = (e) => console.error("[hook] worker message error", e);
 
     return () => {
       w.postMessage({ type: "pause" });
       w.terminate();
       workerRef.current = null;
     };
-  }, [workerURL, windowSize]);
+  }, [modelKey, windowSize]);
 
   const start = useCallback(() => {
     setPrey([]);
     setPredator([]);
-    historyRef.current = { prey: [], predator: [] };
     workerRef.current?.postMessage({ type: "start", params });
     setRunning(true);
   }, [params]);
@@ -72,7 +87,6 @@ export function useEcosimWorker({
   const reset = useCallback(() => {
     setPrey([]);
     setPredator([]);
-    historyRef.current = { prey: [], predator: [] };
     workerRef.current?.postMessage({ type: "reset", params });
     setRunning(false);
   }, [params]);
@@ -81,5 +95,5 @@ export function useEcosimWorker({
     workerRef.current?.postMessage({ type: "setParams", params: patch });
   }, []);
 
-  return { running, prey, predator, start, pause, resume, reset, setParams, historyRef };
+  return { running, prey, predator, start, pause, resume, reset, setParams };
 }
