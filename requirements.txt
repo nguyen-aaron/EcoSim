@@ -1,2 +1,7 @@
 Mesa==0.9.0
+Flask
+Werkzeug
+Jinja2
+itsdangerous
+tornado
 pytest==7.0.1
