@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import TabBar from "./components/TabBar";
 import Home from "./pages/Home";
@@ -22,6 +22,7 @@ function App() {
       </header>
       <div className="container main-area">
         <Routes>
+           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home />} />
           <Route path="/simulate" element={<Simulate />} />
           <Route path="/mesa" element={<MesaSim />} />
