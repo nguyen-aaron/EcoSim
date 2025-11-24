@@ -5,10 +5,12 @@ EcoSim is a webapp that runs custom simulations of various species dynamics in e
 This README explains how to run the frontend (React) and the Python simulation code (Mesa / backend), both separately and together.
 
 **Overview of runtime ports**
+
 - React dev server (frontend): default `3000`.
 - Mesa visualization server (backend): default `8521` (Mesa's default). Run them in separate terminals.
 
 **Recommended versions**
+
 - Python: 3.8 - 3.11
 - Node.js: 16 or higher
 - npm: 8 or higher
@@ -65,6 +67,7 @@ This runs `mesa_abm.server.server.launch()` (Mesa default UI). Mesa serves on po
 Run the frontend and backend in separate terminals to view the UI (frontend) and the Mesa visualizations.
 
 **Running both together**
+
 - Terminal 1 (backend):
 
 ```bash
@@ -81,3 +84,7 @@ npm start
 ```
 
 Open `http://localhost:3000` for the React UI and `http://localhost:8521` for Mesa visualizations (if used).
+
+\*\*To deploy new build to live website
+
+npm run deploy
