@@ -85,6 +85,6 @@ npm start
 
 Open `http://localhost:3000` for the React UI and `http://localhost:8521` for Mesa visualizations (if used).
 
-\*\*To deploy new build to live website
+**To deploy new build to live website**
 
 npm run deploy
