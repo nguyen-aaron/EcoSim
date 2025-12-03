@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/EcoSim/static/css/main.080ca409.css",
-    "main.js": "/EcoSim/static/js/main.dc8adff1.js",
+    "main.js": "/EcoSim/static/js/main.357e50a8.js",
     "static/js/453.727f8ce1.chunk.js": "/EcoSim/static/js/453.727f8ce1.chunk.js",
     "static/media/KaTeX_AMS-Regular.ttf": "/EcoSim/static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "/EcoSim/static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
@@ -63,17 +63,13 @@
     "static/media/KaTeX_Size4-Regular.woff2": "/EcoSim/static/media/KaTeX_Size4-Regular.e418bf257af1052628d8.woff2",
     "static/media/KaTeX_Size3-Regular.woff": "/EcoSim/static/media/KaTeX_Size3-Regular.7947224e8a9914fa332b.woff",
     "static/media/KaTeX_Size3-Regular.woff2": "/EcoSim/static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
-    "static/media/RosenzweigMacArthur.js": "/EcoSim/static/media/RosenzweigMacArthur.ea093db3fadf05265b51.js",
-    "static/media/RandomLotkaVolterra.js": "/EcoSim/static/media/RandomLotkaVolterra.82156b00fc40d1508564.js",
-    "static/media/LotkaVolterra.js": "/EcoSim/static/media/LotkaVolterra.1ee21b712be7f5661398.js",
-    "static/media/CompetitiveLotkaVolterra.js": "/EcoSim/static/media/CompetitiveLotkaVolterra.b0acfab57bb0c63d4261.js",
     "index.html": "/EcoSim/index.html",
     "main.080ca409.css.map": "/EcoSim/static/css/main.080ca409.css.map",
-    "main.dc8adff1.js.map": "/EcoSim/static/js/main.dc8adff1.js.map",
+    "main.357e50a8.js.map": "/EcoSim/static/js/main.357e50a8.js.map",
     "453.727f8ce1.chunk.js.map": "/EcoSim/static/js/453.727f8ce1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.080ca409.css",
-    "static/js/main.dc8adff1.js"
+    "static/js/main.357e50a8.js"
   ]
 }
