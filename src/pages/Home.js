@@ -47,16 +47,24 @@ function Home() {
           </div>
 
           <div className="card" style={{flex:1}}>
-            <h4>Food Chain Dynamics</h4>
+            <h4>Rosenzweig–MacArthur</h4>
             <p style={{color:'var(--muted)'}}>Multi-level interactions between producers, consumers, and top predators.</p>
-            <Link to="/simulate?model=foodchain" className="btn primary">Simulate</Link>
+            <Link to="/simulate?model=rosenzweigmacarthur" className="btn primary">Simulate</Link>
           </div>
 
           <div className="card" style={{flex:1}}>
-            <h4>Invasive Species Model</h4>
-            <p style={{color:'var(--muted)'}}>Simulate the effect of an invasive species on native populations and ecosystem stability.</p>
-            <Link to="/simulate?model=invasive" className="btn primary">Simulate</Link>
+            <h4>Predator–Prey Mesa Simulation</h4>
+            <p style={{color:'var(--muted)'}}>Simulate how an invasive prey species affects native prey and predator populations.</p>
+            <Link to="/mesa" className="btn primary">Simulate</Link>
           </div>
+        </div>
+      </section>
+
+      <section className="card" style={{marginBottom:20}}>
+        <h3>Learn</h3>
+        <p style={{color:'var(--muted)'}}>Endangered species are plants or animals at risk of extinction due to threats like habitat loss, overexploitation, invasive species, disease, and climate change. Protecting them helps preserve biodiversity and maintain healthy ecosystems.</p>
+        <div style={{marginTop:12}}>
+          <Link to="/species" className="btn primary">Explore Species</Link>
         </div>
       </section>
     </main>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { useEcosimWorker } from "../hooks/useEcosimWorker";
 import { MODEL_CONFIG } from "../models/registry";
 import MiniSVGChart from "../components/MiniSVGChart";
@@ -10,7 +11,7 @@ export default function Simulate() {
     "ParamsPanel keys:",
     Object.keys(ParamsPanel),
     "default typeof:",
-    typeof ParamsPanel?.default,
+    typeof ParamsPanel?.default
   );
 
   const [model, setModel] = useState("lotka");
@@ -69,7 +70,9 @@ export default function Simulate() {
     if (running && live && val !== "") {
       const num = Number(val);
       if (Number.isFinite(num)) {
-        const patch = config.toWorker ? config.toWorker({ [name]: num }) : { [name]: num };
+        const patch = config.toWorker
+          ? config.toWorker({ [name]: num })
+          : { [name]: num };
         sendPatch(patch);
       }
     }
@@ -78,7 +81,8 @@ export default function Simulate() {
   const handleResetDefaults = () => {
     const defaults = MODEL_CONFIG[model].defaults;
     setParams(defaults);
-    if (running) sendPatch(config.toWorker ? config.toWorker(defaults) : defaults);
+    if (running)
+      sendPatch(config.toWorker ? config.toWorker(defaults) : defaults);
   };
 
   const handleApplyRestart = () => {
@@ -105,7 +109,7 @@ export default function Simulate() {
     const header = [
       `# Model: ${modelKey}`,
       `# Params: ${JSON.stringify(params)}`,
-      `time,${seriesLabels[0]},${seriesLabels[1]}`
+      `time,${seriesLabels[0]},${seriesLabels[1]}`,
     ];
     const len = Math.max(prey.length, predator.length);
     const rows = [];
@@ -137,7 +141,10 @@ export default function Simulate() {
     const fullPred = historyRef?.current?.predator ?? predator ?? [];
 
     const MAX_ROWS = 50000;
-    const step = Math.max(1, Math.ceil(Math.max(fullPrey.length, fullPred.length) / MAX_ROWS));
+    const step = Math.max(
+      1,
+      Math.ceil(Math.max(fullPrey.length, fullPred.length) / MAX_ROWS)
+    );
 
     const preyDown = fullPrey.filter((_, i) => i % step === 0);
     const predDown = fullPred.filter((_, i) => i % step === 0);
@@ -280,6 +287,33 @@ export default function Simulate() {
           notes={config.about?.notes}
           equation={config.about?.equation}
         />
+
+        <div
+          style={{
+            marginTop: 16,
+            paddingTop: 16,
+            borderTop: "1px solid rgba(15,23,36,0.06)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          <div>
+            <h3 style={{ margin: 0 }}>Learn</h3>
+            <div style={{ color: "var(--muted)", marginTop: 6 }}>
+              Endangered species are those at high risk of extinction. Small
+              population sizes, habitat loss, and environmental change can
+              threaten their survival.
+            </div>
+          </div>
+
+          <div>
+            <Link to="/species" className="btn primary">
+              Learn about Species
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
